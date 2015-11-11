@@ -39,7 +39,7 @@ Create an account at https://developer.leapmotion.com/ and download the SDK. Onc
 - LeapPython.so
 - libLeap.dylib
 
-Next, setup the LEAP motion development environment following the guides below.
+Next, setup the LEAP development environment following the guides below.
 
 - https://developer.leapmotion.com/documentation/java/devguide/Project_Setup.html
 - https://developer.leapmotion.com/documentation/python/devguide/Sample_Tutorial.html
