@@ -1,0 +1,102 @@
+<!-- 
+Copyright 2014-2015 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
+
+    http://aws.amazon.com/apache2.0/
+
+or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Note: Other license terms may apply to certain, identified software files contained within or
+distributed with the accompanying software if such terms are included in the directory containing
+the accompanying software. Such other license terms will then apply in lieu of the terms of the
+software license above.
+-->
+<!doctype html>
+<html class="no-js" lang="">
+  <head>
+    <meta charset="utf-8">
+    <title>Simple Robot Service</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+
+  </head>
+  <body>
+    <!--[if lt IE 10]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <nav class="navbar navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+          aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+            <a class="navbar-brand large" href="#">
+               Simple Robot Service
+            </a>
+            <a class="navbar-brand small" href="#">
+               SRS
+            </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="active">
+              <a href="#">Dashboard</a>
+            </li>
+            <li>
+              <a href="https://github.com/awslabs/simplerobotservice" target="_blank">Build Your Own</a>
+            </li>
+          </ul>
+        </div>
+        <!--/.navbar-collapse -->
+      </div>
+    </nav>
+      <div class="graphs">
+          <h2>Servo Movements</h2>
+          <div id="legend"><ul id="legend-list"></ul></div>
+      </div>
+      <div class="countdown-side">
+          <div class="timer-block" id="timer">00:00</div>
+          <div class="get-ready"> Get Ready!! </div>
+          <div class="go"> Go! Go! Go! </div>
+          <div class="timeout redbox"> Time's up! </div>
+      </div>
+
+      <canvas id="servo" width="600" height="400" style=""></canvas>
+      <div class="instructions"> 
+         <h3>Instructions:</h3> Your goal is to pick up the ball and put it in the bowl. As soon as you put your hands over the Leap Motion sensor, the timer will start. Can you finish in under 60 seconds? 
+      </div>
+      <div class="clockwiseness"> 
+           <span class="allcaps-titles">CLOCKWISENESS</span> 
+           <span id="clockwiseness"><span>
+      </div>
+
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <script src="/bower_components/smoothie/smoothie.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:js(.) scripts/plugins.js -->
+    <!-- endbuild -->
+
+    <!-- build:js scripts/main.js -->
+    <script src="/scripts/main.js"></script>
+    <!-- endbuild -->
+
+  </body>
+</html>

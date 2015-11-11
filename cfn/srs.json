@@ -1,0 +1,284 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Creates the backend resources for Simple Robot Service.",
+    "Resources": {
+      "SRSWWWBucket": {
+          "Type": "AWS::S3::Bucket",
+          "Properties": {
+              "AccessControl": "PublicRead",
+              "WebsiteConfiguration": {
+                  "IndexDocument":"index.html",
+                  "ErrorDocument":"404.html"
+              }
+              }
+          },
+      "WWWBucketPolicy" : {
+        "Type" : "AWS::S3::BucketPolicy",
+        "Properties" : {
+          "Bucket" : { "Ref" : "SRSWWWBucket" },
+          "PolicyDocument": {
+            "Statement":[{
+            "Action":["s3:GetObject"],
+            "Effect":"Allow",
+            "Resource": { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "SRSWWWBucket" } , "/*" ]]},
+            "Principal":"*"
+            }]
+          }
+        }
+      },
+        "SRSLogsBucket": {
+            "Type": "AWS::S3::Bucket"
+        },
+        "SRSDataTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+                "AttributeDefinitions": [{
+                    "AttributeName": "EventID",
+                    "AttributeType": "S"
+                }, {
+                    "AttributeName": "FrameID",
+                    "AttributeType": "N"
+                }],
+                "ProvisionedThroughput": {
+                    "ReadCapacityUnits": "5",
+                    "WriteCapacityUnits": "5"
+                },
+                "KeySchema": [{
+                    "AttributeName": "EventID",
+                    "KeyType": "HASH"
+                }, {
+                    "AttributeName": "FrameID",
+                    "KeyType": "RANGE"
+                }]
+            }
+        },
+        "ReadSRSData": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "Handler": "index.handler",
+            "Role": { "Fn::GetAtt" : ["SRSReadRole", "Arn"] },
+            "Code": {
+              "ZipFile": { "Fn::Join": ["", [
+                "exports.handler = function(event, context) {",
+                " context.succeed('placeholder');",
+                "};"
+              ]]}
+            },
+            "Runtime": "nodejs",
+            "Timeout": "25"
+          }
+        },
+        "SRSReadRole": {
+             "Type": "AWS::IAM::Role",
+             "Properties": {
+                 "Path": {
+                     "Fn::Join": ["", ["/", "srs", "/"]]
+                 },
+                 "AssumeRolePolicyDocument": {
+                     "Version": "2012-10-17",
+                     "Statement": [{
+                         "Effect": "Allow",
+                         "Principal": {
+                             "Service": ["lambda.amazonaws.com", "ec2.amazonaws.com"]
+                         },
+                         "Action": ["sts:AssumeRole"]
+                     }]
+                 }
+             }
+         },
+         "WriteSRSData": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "Handler": "index.handler",
+            "Role": { "Fn::GetAtt" : ["SRSWriteRole", "Arn"] },
+            "Code": {
+              "ZipFile": { "Fn::Join": ["", [
+                "exports.handler = function(event, context) {",
+                " context.succeed('placeholder');",
+                "};"
+              ]]}
+            },
+            "Runtime": "nodejs",
+            "Timeout": "25"
+          }
+        },
+         "SRSWriteRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "Path": {
+                    "Fn::Join": ["", ["/", "srs", "/"]]
+                },
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [{
+                        "Effect": "Allow",
+                        "Principal": {
+                            "Service": ["lambda.amazonaws.com", "ec2.amazonaws.com"]
+                        },
+                        "Action": ["sts:AssumeRole"]
+                    }]
+                }
+            }
+        },
+        "LambdaLogPolicy": {
+            "Type": "AWS::IAM::Policy",
+            "Properties": {
+                "PolicyName": "srs-lambdalogpolicy",
+                "Roles": [{
+                    "Ref": "SRSReadRole"
+                }],
+                "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [{
+                        "Effect": "Allow",
+                        "Action": [
+                            "logs:*"
+                        ],
+                        "Resource": "arn:aws:logs:*:*:*"
+                    }]
+                }
+            }
+        },
+        "S3Policy": {
+            "Type": "AWS::IAM::Policy",
+            "Properties": {
+                "PolicyName": "SRS-s3policy",
+                "Roles": [{
+                    "Ref": "SRSReadRole"
+                }],
+                "PolicyDocument": {
+                    "Statement": [{
+                        "Resource": [{
+                            "Fn::Join": ["", ["arn:aws:s3:::", {
+                                "Ref": "SRSLogsBucket"
+                            }, "*"]]
+                        }],
+                        "Action": [
+                            "s3:ListBucket",
+                            "s3:Put*",
+                            "s3:Get*",
+                            "s3:*MultipartUpload*",
+                            "s3:DeleteObject*"
+                        ],
+                        "Sid": "1",
+                        "Effect": "Allow"
+                    }, {
+                        "Resource": ["arn:aws:s3:::*"],
+                        "Action": ["s3:ListAllMyBuckets", "s3:GetBucketLocation"],
+                        "Sid": "2",
+                        "Effect": "Allow"
+                    }]
+                }
+            }
+        },
+        "DynamoWritePolicy": {
+          "Type": "AWS::IAM::Policy",
+          "Properties": {
+              "PolicyName": "srs-ddbwritepolicy",
+              "Roles": [{
+                  "Ref": "SRSWriteRole"
+              }],
+              "PolicyDocument": {
+                  "Statement": [{
+                      "Resource": [{
+                          "Fn::Join": ["", ["arn:aws:dynamodb:", {
+                              "Ref": "AWS::Region"
+                          }, ":", {
+                              "Ref": "AWS::AccountId"
+                          }, ":table/", {
+                              "Ref": "SRSDataTable"
+                          }, "*"]]
+                      }],
+                      "Action": [
+                          "dynamodb:PutItem",
+                          "dynamodb:UpdateItem"
+                      ],
+                      "Sid": "1",
+                      "Effect": "Allow"
+                  }, {
+                      "Resource": "*",
+                      "Action": [
+                          "dynamodb:DescribeTable",
+                          "dynamodb:ListTables",
+                          "dynamodb:CreateTable",
+                          "cloudwatch:*"
+                      ],
+                      "Sid": "2",
+                      "Effect": "Allow"
+                  }]
+              }
+          }
+      },
+        "DynamoReadPolicy": {
+            "Type": "AWS::IAM::Policy",
+            "Properties": {
+                "PolicyName": "SRS-ddbreadpolicy",
+                "Roles": [{
+                    "Ref": "SRSReadRole"
+                }],
+                "PolicyDocument": {
+                    "Statement": [{
+                        "Resource": [{
+                            "Fn::Join": ["", ["arn:aws:dynamodb:", {
+                                "Ref": "AWS::Region"
+                            }, ":", {
+                                "Ref": "AWS::AccountId"
+                            }, ":table/", {
+                                "Ref": "SRSDataTable"
+                            }, "*"]] }],
+                        "Action": [
+                            "dynamodb:BatchGetItem",
+                            "dynamodb:BatchWriteItem",
+                            "dynamodb:Query",
+                            "dynamodb:GetItem",
+                            "dynamodb:Scan"
+                        ],
+                        "Sid": "1",
+                        "Effect": "Allow"
+                    }, {
+                        "Resource": "*",
+                        "Action": [
+                            "dynamodb:DescribeTable",
+                            "dynamodb:ListTables",
+                            "dynamodb:CreateTable",
+                            "cloudwatch:*"
+                        ],
+                        "Sid": "2",
+                        "Effect": "Allow"
+                    }]
+                }
+            }
+        }
+      },
+    "Outputs": {
+      "DynamoRegion": {
+            "Value": {
+                "Ref": "AWS::Region"
+            }
+        },
+       "SRSDataDynamoDBTable": {
+            "Value": {
+                "Ref": "SRSDataTable"
+            }
+        },
+        "SRSLambdaWriteSBSData": {
+             "Value": {
+                 "Ref": "WriteSRSData"
+             }
+         },
+          "SRSLambdaReadSRSData": {
+               "Value": {
+                   "Ref": "ReadSRSData"
+               }
+           },
+           "WebsiteURL": {
+               "Value": {"Fn::GetAtt": ["SRSWWWBucket", "WebsiteURL"]},
+               "Description": "URL for website hosted on S3"
+           },
+        "LogsBucket": {
+            "Value": {
+                "Ref": "SRSLogsBucket"
+            }
+        }
+    }
+}
