@@ -83,9 +83,9 @@ Next, create the Lambda functions. In the folder web/lambda there are two subfol
 npm install
 ```
 
-Then, edit **index.js** for each function and put in the DynamoDB table name created above and an EventID.
+This will download and install all of the required node modules. Then, edit **index.js** for each function and put in the DynamoDB table name created above and an EventID. After you have edited the index.js file and the NPM install process completes, zip up the contents of that directory (make sure that index.js is in the root of the zip file).
 
-This will download and install all of the required node modules. After the NPM install process completes, zip up the contents of that directory (make sure that index.js is in the root of the zip file). Then, follow these steps:
+Once the zip file is ready, follow these steps:
 
 1. Open the **Lambda** console.
 
