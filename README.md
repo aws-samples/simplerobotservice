@@ -8,9 +8,10 @@ Simple Robot Service uses AWS IoT to send messages between a publisher and a sub
 
 ![Overall Architecture](architecture-arm.png)
 
-Simple Robot Service was demonstrated at the AWS keynote address at Re:Invent 2015.
+Simple Robot Service was demonstrated during the AWS keynote address at Re:Invent 2015.
 
 [<img src="srs-demo.png" alt="Simple Robot Service Demo" width="300">](https://youtu.be/y-0Wf2Zyi5Q?t=4176)
+[Click here to play the video.](https://youtu.be/y-0Wf2Zyi5Q?t=4176)
 
 ### Bill of Materials
 
