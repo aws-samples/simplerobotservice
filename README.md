@@ -6,9 +6,11 @@ SRS is a cloud-connected robot arm that subscribes to a gesture input device (Le
 
 Simple Robot Service uses AWS IoT to send messages between a publisher and a subscriber. The **publisher.py** script will run on the computer connected to the LEAP motion controller. The **subscriber.py** script will run on the raspberry pi that has the Adafruit Servo Hat and the Robotic Arm connected.
 
+![Overall Architecture](architecture-arm.png)
+
 Simple Robot Service was demonstrated at the AWS keynote address at Re:Invent 2015.
 
-[![Simple Robot Service Demo](srs-demo.png)](https://youtu.be/y-0Wf2Zyi5Q?t=4176)
+[<img src="srs-demo.png" alt="Simple Robot Service Demo" width="200">](https://youtu.be/y-0Wf2Zyi5Q?t=4176)
 
 ### Bill of Materials
 
@@ -76,6 +78,8 @@ To operate the robotic arm, attach the LEAP motion controller to the laptop and 
 ## Web Visualization
 
 Visualize this data in real-time by running the web application code found in the web/ directory.
+
+![Overall Architecture](architecture-website.png)
 
 In order to visualize the data from various locations, we will need to store the data in a database. In this example, AWS IoT is used to invoke a Lambda function that writes to DynamoDB based on a defined rule. All of the resources with exception of the AWS IoT resources can be created using cloudformation. Two cloud formation scripts are included, one for custom domains that includes route53 hosted zone information (**srs-with-domain.json**), and one that uses AWS provided S3 URLs (**srs.json**). The two scripts can be found in the */cfn* folder.
 
