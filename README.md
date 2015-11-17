@@ -6,12 +6,20 @@ SRS is a cloud-connected robot arm that subscribes to a gesture input device (Le
 
 Simple Robot Service uses AWS IoT to send messages between a publisher and a subscriber. The **publisher.py** script will run on the computer connected to the LEAP motion controller. The **subscriber.py** script will run on the raspberry pi that has the Adafruit Servo Hat and the Robotic Arm connected.
 
+Simple Robot Service was demonstrated at the AWS keynote address at Re:Invent 2015.
+
+[![Simple Robot Service Demo](srs-demo.png)](https://youtu.be/y-0Wf2Zyi5Q?t=4176)
+
 ### Bill of Materials
 
-- Raspberry Pi (http://www.amazon.com/gp/product/B00LPESRUK)
-- Adafruit Servo Hat for Raspberry Pi (http://www.amazon.com/Adafruit-16-Channel-PWM-Servo-Raspberry/dp/B00XW2OY5A)
-- Robotic Arm
-- LEAP Motion Controller (http://www.amazon.com/Leap-Motion-Controller-Gesture-Control/dp/B00E3CP9UM)
+Complete list:
+http://www.amazon.com/registry/giftlist/10S3G6J5UJBXO
+
+This includes:
+- [Raspberry Pi](http://www.amazon.com/dp/B008XVAVAW)
+- [Adafruit Servo Hat for Raspberry Pi](http://www.amazon.com/dp/B00XW2OY5A)
+- [Robotic Arm](http://www.amazon.com/dp/B00NB1DFF2)
+- [LEAP Motion Controller](http://www.amazon.com/dp/B00HVYBWQO)
 
 ## Setting up AWS IoT
 
