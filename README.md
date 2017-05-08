@@ -16,9 +16,6 @@ Simple Robot Service was demonstrated during the AWS keynote address at Re:Inven
 
 ### Bill of Materials
 
-Complete list:
-http://www.amazon.com/registry/giftlist/10S3G6J5UJBXO
-
 This includes:
 - [Raspberry Pi](http://www.amazon.com/dp/B008XVAVAW)
 - [Adafruit Servo Hat for Raspberry Pi](http://www.amazon.com/dp/B00XW2OY5A)
